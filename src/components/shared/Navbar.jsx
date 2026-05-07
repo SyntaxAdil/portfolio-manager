@@ -11,9 +11,9 @@ const Navbar = () => {
 
   const Nav_Links = [
     { id: 1, href: "/", label: "Home" },
-    { id: 2, href: "/about", label: "About" },
-    { id: 3, href: "/projects", label: "Projects" },
-    { id: 4, href: "/skills", label: "Skills" },
+    { id: 2, href: "/add-project", label: "Add Project" },
+    { id: 3, href: "/edit-project", label: "Edit Project" },
+    { id: 4, href: "/remove-project", label: "Remove Project" },
   ];
 
   return (
