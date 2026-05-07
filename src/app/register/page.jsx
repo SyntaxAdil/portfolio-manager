@@ -7,7 +7,7 @@ import { Input } from "../../components/ui/input";
 import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
+import { Alert, AlertTitle } from "../../components/ui/alert";
 
 export const Google = () => {
   return (
@@ -105,12 +105,6 @@ const Register = () => {
                 />
               </div>
 
-              {errors.password && (
-                <Alert variant="destructive" className="max-w-md border-0">
-                  <AlertCircleIcon />
-                  <AlertTitle> {errors.password.message}</AlertTitle>
-                </Alert>
-              )}
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
