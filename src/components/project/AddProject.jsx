@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Badge } from "../ui/badge";
 import { useState } from "react";
+import { addProject } from "../../lib/porject";
 
 // tag component
 export const Techstack = ({ children, onClick }) => {
@@ -38,20 +39,34 @@ const AddProject = () => {
     if (!id) return;
     setTags((prev) => prev.filter((i) => i.id !== id));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formdata = new FormData(e.target);
+    const newProject = Object.fromEntries(formdata.entries());
+    newProject.tags = tags;
+
+    await addProject(newProject);
+  };
   return (
     <section className="my-4">
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <FieldGroup className={"max-w-xl mx-auto"}>
           {/* title */}
           <Field>
             <FieldLabel htmlFor="fieldgroup-title">Project Title</FieldLabel>
-            <Input id="fieldgroup-name" placeholder="Skillsphere" />
+            <Input
+              name="title"
+              id="fieldgroup-title"
+              placeholder="Skillsphere"
+            />
           </Field>
           {/* image link */}
           <Field>
             <FieldLabel htmlFor="fieldgroup-title">Thumbnail url</FieldLabel>
             <Input
               id="fieldgroup-name"
+              name="image"
               placeholder="https://ibb.co.com/6JwMkHFm"
             />
             <FieldDescription className={"flex items-center gap-1"}>
@@ -66,6 +81,7 @@ const AddProject = () => {
           <Field>
             <FieldLabel htmlFor="fieldgroup-descripion">Description</FieldLabel>
             <Textarea
+              name="description"
               id="fieldgroup-descripion"
               placeholder="Type your project description here."
             />
@@ -78,6 +94,7 @@ const AddProject = () => {
                 Github Repository
               </FieldLabel>
               <Input
+                name="github"
                 id="fieldgroup-github"
                 placeholder="https://github.com/SyntaxAdil/portfolio-manager"
               />
@@ -88,6 +105,7 @@ const AddProject = () => {
             <Field>
               <FieldLabel htmlFor="fieldgroup-live">Live Link</FieldLabel>
               <Input
+                name="live"
                 id="fieldgroup-live"
                 placeholder="https://abdur-rahman-dev.vercel.app"
               />
