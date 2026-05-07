@@ -1,16 +1,17 @@
 "use client";
 
-import NavLink from "@/utils/NavLink";
+
 import { FolderKanban, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import NavLink from "../../utils/NavLink";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   const Nav_Links = [
-    { id: 1, href: "/", label: "Home" },
+    { id: 1, href: "/", label: "Projects" },
     { id: 2, href: "/add-project", label: "Add Project" },
     { id: 3, href: "/edit-project", label: "Edit Project" },
     { id: 4, href: "/remove-project", label: "Remove Project" },
@@ -38,8 +39,8 @@ const Navbar = () => {
 
           <ul className="hidden md:flex items-center gap-2">
             {Nav_Links.map((link) => (
-              <li key={link.id} className="px-3 py-2">
-                <NavLink href={link.href}>{link.label}</NavLink>
+              <li key={link.id} className="px-3 py-2" >
+                <NavLink  href={link.href}>{link.label}</NavLink>
               </li>
             ))}
           </ul>
@@ -64,7 +65,7 @@ const Navbar = () => {
           <div className="md:hidden border-t bg-background">
             <ul className="flex flex-col p-4">
               {Nav_Links.map((link) => (
-                <li key={link.id} className="py-2">
+                <li key={link.id} className="py-2" onClick={()=>setOpen(false)}>
                   <NavLink href={link.href}>{link.label}</NavLink>
                 </li>
               ))}

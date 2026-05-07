@@ -8,6 +8,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Alert, AlertTitle } from "../../components/ui/alert";
+import { router } from "better-auth/api";
+import { useRouter } from "next/navigation";
+import { authClient } from "../../lib/auth/auth-client";
 
 export const Google = () => {
   return (
@@ -38,6 +41,7 @@ export const Google = () => {
 };
 
 const Register = () => {
+  const router = useRouter();
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const {
@@ -46,10 +50,33 @@ const Register = () => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
-
   const onSubmit = async (data) => {
-    console.log(data);
-    reset();
+    setError(""); 
+
+    try {
+      const res = await authClient.signUp.email(
+        {
+          name: data.name,
+          image: data.image,
+          email: data.email,
+          password: data.password,
+        },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+        },
+      );
+
+      if (res?.error) {
+        setError(res.error);
+        
+        return;
+      }
+      reset();
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -70,9 +97,28 @@ const Register = () => {
             {error && (
               <Alert variant="destructive" className="max-w-md">
                 <AlertCircleIcon />
-                <AlertTitle>Payment failed</AlertTitle>
+                <AlertTitle>{error.message}</AlertTitle>
               </Alert>
             )}
+            <Field>
+              <FieldLabel htmlFor="name">Name</FieldLabel>
+
+              <Input
+                id="name"
+                type="text"
+                placeholder="Abdur Rahman"
+                {...register("name", {
+                  required: "Name is required",
+                })}
+              />
+
+              {errors.name && (
+                <Alert variant="destructive" className="max-w-md border-0">
+                  <AlertCircleIcon />
+                  <AlertTitle> {errors.name.message}</AlertTitle>
+                </Alert>
+              )}
+            </Field>
             <Field>
               <FieldLabel htmlFor="email">Email Address</FieldLabel>
 
@@ -104,7 +150,6 @@ const Register = () => {
                   {...register("image")}
                 />
               </div>
-
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>

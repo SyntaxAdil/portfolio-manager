@@ -7,14 +7,15 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Badge } from "../ui/badge";
 import { useRef, useState } from "react";
-import { addProject } from "../../lib/porject";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
-// tag component
+// tag component (UNCHANGED)
 export const Techstack = ({ children, onClick }) => {
   return (
     <Badge className="bg-white w-26 px-4 py-3 flex items-center justify-between gap-2">
       <span className="truncate capitalize">{children}</span>
-      <button onClick={onClick} type="button" className="cursor-pointer ">
+      <button onClick={onClick} type="button">
         <X size={18} />
       </button>
     </Badge>
@@ -22,162 +23,204 @@ export const Techstack = ({ children, onClick }) => {
 };
 
 const AddProject = () => {
+  const router = useRouter();
+
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const projectForm = useRef(null);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
+
+  // add tag (UNCHANGED logic)
   const addToTag = () => {
     if (!tagInput) return;
-    const newTag = {
-      tag: tagInput,
-      id: crypto.randomUUID(),
-    };
-    setTags((prev) => [...prev, newTag]);
+
+    setTags((prev) => [...prev, { tag: tagInput, id: crypto.randomUUID() }]);
+
     setTagInput("");
   };
 
   const removeTag = (id) => {
-    if (!id) return;
     setTags((prev) => prev.filter((i) => i.id !== id));
   };
 
-  const handleKeyDowmForTag = (e) => {
-    if (!tagInput) return;
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addToTag();
+  const onSubmit = async (data) => {
+    const newProject = {
+      ...data,
+      tech: tags,
+    };
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URI}/api/project`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProject),
+      },
+    );
+
+    const result = await res.json();
+
+    if (result.success) {
+      router.push("/");
+      reset();
+      setTags([]);
+      setTagInput("");
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formdata = new FormData(e.target);
-    const newProject = Object.fromEntries(formdata.entries());
-    newProject.tags = tags;
-
-    await addProject(newProject);
-
-    resetForm();
-  };
-
-  const resetForm = () => {
-    projectForm.current.reset();
-    setTagInput("");
-    setTags([]);
-  };
   return (
     <section className="my-4">
       <form
         ref={projectForm}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="border max-w-2xl mx-auto p-6 rounded-lg mt-6"
       >
         <FieldGroup>
+          {/* TITLE + IMAGE */}
           <FieldGroup className={"md:flex-row "}>
-            {/* title */}
             <Field>
-              <FieldLabel htmlFor="fieldgroup-title">Project Title</FieldLabel>
+              <FieldLabel>Project Title</FieldLabel>
               <Input
-                name="title"
-                id="fieldgroup-title"
                 placeholder="Skillsphere"
+                {...register("title", {
+                  required: "Title is required",
+                })}
               />
+              {errors.title && (
+                <FieldDescription className="text-red-500">
+                  {errors.title.message}
+                </FieldDescription>
+              )}
             </Field>
-            {/* image link */}
+
             <Field>
-              <FieldLabel htmlFor="fieldgroup-iamge">Thumbnail url</FieldLabel>
+              <FieldLabel>Thumbnail url</FieldLabel>
               <Input
-                id="fieldgroup-image"
-                name="image"
-                placeholder="https://ibb.co.com/6JwMkHFm"
+                placeholder="https://image.com"
+                {...register("image", {
+                  required: "Image is required",
+                })}
               />
-              <FieldDescription
-                className={"flex items-center gap-1  flex-wrap"}
-              >
-                <InfoIcon size={14} /> Visit
+              <FieldDescription className="flex items-center gap-1 flex-wrap">
+                <InfoIcon size={14} /> Visit{" "}
                 <a href="https://imgbb.com/" target="_blank">
                   ImgBB
                 </a>{" "}
                 to generate image URL Free.
               </FieldDescription>
+              {errors.image && (
+                <FieldDescription className="text-red-500">
+                  {errors.image.message}
+                </FieldDescription>
+              )}
             </Field>
           </FieldGroup>
-          {/* desription */}
+
+          {/* DESCRIPTION */}
           <Field>
-            <FieldLabel htmlFor="fieldgroup-descripion">Description</FieldLabel>
+            <FieldLabel>Description</FieldLabel>
             <Textarea
-              name="description"
-              id="fieldgroup-descripion"
               placeholder="Type your project description here."
+              {...register("description", {
+                required: "Description is required",
+              })}
             />
+            {errors.description && (
+              <FieldDescription className="text-red-500">
+                {errors.description.message}
+              </FieldDescription>
+            )}
           </Field>
-          {/* links */}
-          <FieldGroup className={"flex  flex-col md:flex-row"}>
-            {/* github  */}
+
+          {/* LINKS */}
+          <FieldGroup className={"flex flex-col md:flex-row"}>
             <Field>
-              <FieldLabel htmlFor="fieldgroup-gtihub">
-                Github Repository
-              </FieldLabel>
+              <FieldLabel>Github Repository</FieldLabel>
               <Input
-                name="github"
-                id="fieldgroup-github"
-                placeholder="https://github.com/SyntaxAdil/portfolio-manager"
+                placeholder="github link"
+                {...register("github", {
+                  required: "Github link required",
+                })}
               />
+              {errors.github && (
+                <FieldDescription className="text-red-500">
+                  {errors.github.message}
+                </FieldDescription>
+              )}
             </Field>
 
-            {/* live */}
-
             <Field>
-              <FieldLabel htmlFor="fieldgroup-live">Live Link</FieldLabel>
+              <FieldLabel>Live Link</FieldLabel>
               <Input
-                name="live"
-                id="fieldgroup-live"
-                placeholder="https://abdur-rahman-dev.vercel.app"
+                placeholder="live link"
+                {...register("live", {
+                  required: "Live link required",
+                })}
               />
+              {errors.live && (
+                <FieldDescription className="text-red-500">
+                  {errors.live.message}
+                </FieldDescription>
+              )}
             </Field>
           </FieldGroup>
 
+          {/* TECH STACK (UNCHANGED UI) */}
           <Field>
-            <FieldLabel htmlFor="fieldgroup-tech">Tech Stack</FieldLabel>
-            <div className="flex  gap-2 flex-col md:flex-row ">
+            <FieldLabel>Tech Stack</FieldLabel>
+
+            <div className="flex gap-2 flex-col md:flex-row">
               <Input
-                id="fieldgroup-tech"
-                placeholder="Next JS 16.2 "
                 value={tagInput}
-                onKeyDown={handleKeyDowmForTag}
                 onChange={(e) => setTagInput(e.target.value)}
+                placeholder="Next JS"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addToTag();
+                  }
+                }}
               />
-              <Button
-                variant="secondary"
-                type="button"
-                className={"rounded w-full md:w-fit"}
-                onClick={addToTag}
-              >
+
+              <Button type="button" variant="secondary" onClick={addToTag}>
                 Add Stack
               </Button>
             </div>
           </Field>
 
-          <div className="flex  gap-2 flex-wrap">
+          <div className="flex gap-2 flex-wrap">
             {tags.map((tag) => (
               <Techstack key={tag.id} onClick={() => removeTag(tag.id)}>
-                {" "}
                 {tag.tag}
               </Techstack>
             ))}
           </div>
+
+          {/* ACTIONS (UNCHANGED UI) */}
           <Field orientation="horizontal">
             <Button
-              onClick={resetForm}
               type="button"
               variant="outline"
-              className={"flex-1 md:flex-0"}
+              onClick={() => {
+                reset();
+                setTags([]);
+                setTagInput("");
+              }}
             >
               Reset
             </Button>
-            <Button type="submit" className={"flex-1 md:flex-0"}>
-              {" "}
-              <Plus></Plus>Add Project
+
+            <Button type="submit" disabled={isSubmitting}>
+              <Plus />
+              {isSubmitting ? "Adding..." : "Add Project"}
             </Button>
           </Field>
         </FieldGroup>

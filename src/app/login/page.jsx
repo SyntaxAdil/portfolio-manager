@@ -7,7 +7,9 @@ import { Input } from "../../components/ui/input";
 import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { Alert, AlertDescription, AlertTitle } from "../../components/ui/alert";
+import { Alert, AlertTitle } from "../../components/ui/alert";
+import { authClient } from "../../lib/auth/auth-client";
+import { useRouter } from "next/navigation";
 
 export const Google = () => {
   return (
@@ -38,6 +40,8 @@ export const Google = () => {
 };
 
 const Login = () => {
+    const router = useRouter();
+  
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const {
@@ -48,10 +52,31 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
-    reset();
-  };
+    setError("");
 
+    try {
+      const res = await authClient.signIn.email(
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+        },
+      );
+
+      if (res?.error) {
+        setError(res.error);
+
+        return;
+      }
+      reset();
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    }
+  };
   return (
     <section className="flex min-h-[80dvh] items-center justify-center px-4">
       <div className="w-full max-w-md rounded-xl border bg-card p-6 shadow-sm transition-all duration-200 hover:border-primary">
@@ -68,7 +93,7 @@ const Login = () => {
             {error && (
               <Alert variant="destructive" className="max-w-md">
                 <AlertCircleIcon />
-                <AlertTitle>Payment failed</AlertTitle>
+                <AlertTitle>{error.message}</AlertTitle>
               </Alert>
             )}
             <Field>
