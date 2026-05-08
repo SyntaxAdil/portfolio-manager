@@ -140,13 +140,13 @@ const Register = () => {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="password">Photo URL</FieldLabel>
+              <FieldLabel htmlFor="image">Photo URL</FieldLabel>
 
               <div>
                 <Input
-                  id="password"
+                  id="image"
                   placeholder="Enter your photo url"
-                  type={showPass ? "text" : "password"}
+                  type="text"
                   {...register("image")}
                 />
               </div>
