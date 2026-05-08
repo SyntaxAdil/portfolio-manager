@@ -185,7 +185,7 @@ const Register = () => {
               {isSubmitting ? <Loader2 className="animate-spin" /> : "Register"}
             </Button>
 
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            {/* <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="h-px w-full bg-border" />
               <span>OR</span>
               <div className="h-px w-full bg-border" />
@@ -198,7 +198,7 @@ const Register = () => {
             >
               <Google />
               Login with Google
-            </Button>
+            </Button> */}
 
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?
