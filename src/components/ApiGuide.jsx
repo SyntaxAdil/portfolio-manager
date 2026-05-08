@@ -10,7 +10,7 @@ const ApiGuide = () => {
   const { data: session } = authClient.useSession();
   const userId = session?.user?.id;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URI;
-  const projectsUrl = `${baseUrl}/api/projects/userId`;
+  const projectsUrl = `${baseUrl}/api/project/userId`;
 
   const [revealed, setRevealed] = useState(false);
   const [copied, setCopied] = useState(false);
