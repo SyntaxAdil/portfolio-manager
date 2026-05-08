@@ -54,17 +54,14 @@ const AddProject = () => {
       ...data,
       tech: tags,
     };
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URI}/api/project`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProject),
+    console.log(newProject);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/project`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(newProject),
+    });
 
     const result = await res.json();
 
