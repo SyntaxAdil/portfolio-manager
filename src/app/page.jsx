@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import ApiGuide from "../components/ApiGuide";
 
 const getProject = async (id) => {
-  const res = await fetch(`http://localhost:3000/api/project/${id}`);
+  const res = await fetch(`http://${process.env.NEXT_PUBLIC_BASE_URI}/api/project/${id}`);
   const data = await res.json();
   return data.data;
 };
