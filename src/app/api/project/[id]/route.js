@@ -26,7 +26,7 @@ export async function GET(req, { params }) {
     await connectDB();
 
     const projects = await Projects.find({ user: id });
-    console.log(projects);
+    
     return NextResponse.json({
       data: projects,
       success: true,
