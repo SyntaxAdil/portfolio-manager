@@ -2,7 +2,7 @@
 
 > A personal project management dashboard that gives you a **public API** to showcase your projects anywhere — portfolio sites, resumes, or any frontend.
 
-![Portfolio Manager Screenshot](./screenshot.png)
+![Portfolio Manager Screenshot](/public/screenshot.png)
 
 ---
 
