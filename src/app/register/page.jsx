@@ -11,6 +11,7 @@ import { Alert, AlertTitle } from "../../components/ui/alert";
 import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
 import { authClient } from "../../lib/auth/auth-client";
+import toast from "react-hot-toast";
 
 export const Google = () => {
   return (
@@ -51,7 +52,7 @@ const Register = () => {
     reset,
   } = useForm();
   const onSubmit = async (data) => {
-    setError(""); 
+    setError("");
 
     try {
       const res = await authClient.signUp.email(
@@ -64,13 +65,16 @@ const Register = () => {
         {
           onSuccess: () => {
             router.push("/");
+            toast.success("Registration successful");
           },
         },
       );
 
       if (res?.error) {
+        toast.error("Registration failed. Please try again.");
+
         setError(res.error);
-        
+
         return;
       }
       reset();

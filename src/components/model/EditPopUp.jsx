@@ -19,6 +19,7 @@ import { Badge } from "../ui/badge";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 // tag component (from AddProject)
 export const Techstack = ({ children, onClick }) => {
@@ -81,11 +82,14 @@ export function EditPopUp({ project }) {
     const result = await res.json();
 
     if (result.success) {
+      toast.success("Project updated successfully ");
       router.refresh();
       reset();
       setTags([]);
       setTagInput("");
       setOpen(false);
+    } else {
+      toast.error("Failed to update project. Please try again.");
     }
   };
 

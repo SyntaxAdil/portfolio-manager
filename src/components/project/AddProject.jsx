@@ -9,6 +9,7 @@ import { Badge } from "../ui/badge";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 // tag component (UNCHANGED)
 export const Techstack = ({ children, onClick }) => {
@@ -66,10 +67,14 @@ const AddProject = () => {
     const result = await res.json();
 
     if (result.success) {
+      toast.success("Project created successfully")
       router.push("/");
       reset();
       setTags([]);
       setTagInput("");
+    }else{
+      
+      toast.error("Something went wrong while creating the project.")
     }
   };
 

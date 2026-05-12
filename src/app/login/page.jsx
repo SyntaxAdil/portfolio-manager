@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { Alert, AlertTitle } from "../../components/ui/alert";
 import { authClient } from "../../lib/auth/auth-client";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export const Google = () => {
   return (
@@ -63,11 +64,13 @@ const Login = () => {
         {
           onSuccess: () => {
             router.push("/");
+            toast.success("Login Successful")
           },
         },
       );
 
       if (res?.error) {
+        toast.error("Invalid credentials. Please try again.")
         setError(res.error);
 
         return;

@@ -15,6 +15,7 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export function DltPopUp({ project }) {
   const router = useRouter();
@@ -27,15 +28,16 @@ export function DltPopUp({ project }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(  {_id: project._id})
-
+          body: JSON.stringify({ _id: project._id }),
         },
       );
       const result = await res.json();
 
       if (result.success) {
+        toast.success("Project deleted successfully");
         router.refresh();
-        console.log("Done")
+      } else {
+        toast.error("Failed to delete project. Try again later.");
       }
     } catch (error) {
       console.log(error);
