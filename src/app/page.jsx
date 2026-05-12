@@ -6,11 +6,16 @@ import { redirect } from "next/navigation";
 import ApiGuide from "../components/ApiGuide";
 
 const getProject = async (id) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/project/${id}`
-    ,{cache:"no-store"}
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URI}/api/project/${id}`,
+    { cache: "no-store" },
   );
   const data = await res.json();
-  return data.data;
+  return data.data.sort((a, b) => {
+    if (a.isFeatured && !b.isFeatured) return -1;
+    if (!a.isFeatured && b.isFeatured) return 1;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 };
 
 const Home = async () => {
