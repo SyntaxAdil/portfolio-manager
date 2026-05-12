@@ -10,6 +10,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { Checkbox } from "../ui/checkbox";
 
 // tag component (UNCHANGED)
 export const Techstack = ({ children, onClick }) => {
@@ -28,6 +29,7 @@ const AddProject = () => {
 
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
+  const [isFeatured, setIsFeautures] = useState(false);
   const projectForm = useRef(null);
 
   const {
@@ -53,9 +55,10 @@ const AddProject = () => {
   const onSubmit = async (data) => {
     const newProject = {
       ...data,
+      isFeatured:isFeatured,
       tech: tags,
     };
-    console.log(newProject);
+   
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/project`, {
       method: "POST",
       headers: {
@@ -67,14 +70,13 @@ const AddProject = () => {
     const result = await res.json();
 
     if (result.success) {
-      toast.success("Project created successfully")
+      toast.success("Project created successfully");
       router.push("/");
       reset();
       setTags([]);
       setTagInput("");
-    }else{
-      
-      toast.error("Something went wrong while creating the project.")
+    } else {
+      toast.error("Something went wrong while creating the project.");
     }
   };
 
@@ -140,6 +142,19 @@ const AddProject = () => {
                 {errors.description.message}
               </FieldDescription>
             )}
+          </Field>
+          {/* isFeatured */}
+          <Field orientation="horizontal">
+            <Checkbox
+              id="is-featured"
+              checked={isFeatured}
+              onCheckedChange={()=>setIsFeautures(p=>!p)}
+              {...register("isFeatured")}
+            />
+
+            <FieldLabel htmlFor="is-featured">
+              Promote as top project
+            </FieldLabel>
           </Field>
 
           {/* LINKS */}

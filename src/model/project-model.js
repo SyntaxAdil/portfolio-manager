@@ -32,6 +32,10 @@ const projectSchema = new mongoose.Schema(
         id: String,
       },
     ],
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

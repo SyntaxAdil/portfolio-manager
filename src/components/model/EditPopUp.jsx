@@ -20,6 +20,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { Checkbox } from "../ui/checkbox";
+
 
 // tag component (from AddProject)
 export const Techstack = ({ children, onClick }) => {
@@ -37,6 +39,8 @@ export function EditPopUp({ project }) {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState(project.tech || []);
   const [tagInput, setTagInput] = useState("");
+  const [isFeatured, setIsFeautures] = useState( project.isFeatured || false);
+
   const router = useRouter();
   const {
     register,
@@ -50,6 +54,7 @@ export function EditPopUp({ project }) {
       description: project.description,
       github: project.github,
       live: project.live,
+      
     },
   });
 
@@ -69,6 +74,7 @@ export function EditPopUp({ project }) {
     const updatedProject = {
       _id: project._id,
       ...data,
+      isFeatured: isFeatured,
       tech: tags,
     };
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/project`, {
@@ -168,6 +174,20 @@ export function EditPopUp({ project }) {
                   {errors.description.message}
                 </FieldDescription>
               )}
+            </Field>
+
+            {/* isFeatured */}
+            <Field orientation="horizontal">
+              <Checkbox
+                id="is-featured"
+                checked={isFeatured}
+                onCheckedChange={() => setIsFeautures((p) => !p)}
+                {...register("isFeatured")}
+              />
+
+              <FieldLabel htmlFor="is-featured">
+                Promote as top project
+              </FieldLabel>
             </Field>
 
             {/* LINKS */}
