@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { Alert, AlertTitle } from "../../components/ui/alert";
 import { router } from "better-auth/api";
 import { useRouter } from "next/navigation";
-import { authClient } from "../../lib/auth/auth-client";
+import { authClient, signInGoogle } from "../../lib/auth/auth-client";
 import toast from "react-hot-toast";
 
 export const Google = () => {
@@ -189,20 +189,21 @@ const Register = () => {
               {isSubmitting ? <Loader2 className="animate-spin" /> : "Register"}
             </Button>
 
-            {/* <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="h-px w-full bg-border" />
               <span>OR</span>
               <div className="h-px w-full bg-border" />
             </div>
 
             <Button
+              onClick={async () => await signInGoogle()}
               type="button"
               variant="outline"
               className="w-full gap-2 bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
             >
               <Google />
               Login with Google
-            </Button> */}
+            </Button>
 
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?

@@ -18,8 +18,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router=useRouter()
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const [open, setOpen] = useState(false);
@@ -31,6 +33,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await authClient.signOut();
+    router.push("/login")
   };
 
   return (

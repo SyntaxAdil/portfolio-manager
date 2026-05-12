@@ -8,7 +8,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Alert, AlertTitle } from "../../components/ui/alert";
-import { authClient } from "../../lib/auth/auth-client";
+import { authClient, signInGoogle } from "../../lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -153,20 +153,21 @@ const Login = () => {
               {isSubmitting ? <Loader2 className="animate-spin" /> : "Login"}
             </Button>
 
-            {/* <div className="flex items-center gap-4 text-xs text-muted-foreground">
+           <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <div className="h-px w-full bg-border" />
               <span>OR</span>
               <div className="h-px w-full bg-border" />
-            </div> */}
+            </div> 
 
-            {/* <Button
+             <Button
+             onClick={async()=>await signInGoogle()}
               type="button"
               variant="outline"
               className="w-full gap-2 bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
             >
               <Google />
               Login with Google
-            </Button> */}
+            </Button> 
 
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?
