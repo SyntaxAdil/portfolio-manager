@@ -1,36 +1,153 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🗂️ Portfolio Manager
 
-## Getting Started
+> A personal project management dashboard that gives you a **public API** to showcase your projects anywhere — portfolio sites, resumes, or any frontend.
 
-First, run the development server:
+![Portfolio Manager Screenshot](./screenshot.png)
+
+---
+
+## ✨ What is this?
+
+**Portfolio Manager** lets you log in, manage your projects in one place, and get a unique public API endpoint — so you can fetch and display your projects on any website or app without building a backend yourself.
+
+---
+
+## 🚀 How it works
+
+1. **Sign up / Log in** to your dashboard
+2. **Add your projects** — title, description, thumbnail, tech stack, GitHub & live links
+3. **Get your personal API URL** — something like:
+   ```
+   https://portfolio-manager.vercel.app/api/project/{your-user-id}
+   ```
+4. **Use it anywhere** — call that URL from your portfolio site, resume page, or any app
+
+---
+
+## 🔗 Using the API
+
+Once logged in, you'll find your unique API URL in the dashboard. Use it with a simple `fetch` call:
+
+```js
+const res = await fetch("https://portfolio-manager.vercel.app/api/project/YOUR_USER_ID");
+const { data } = await res.json();
+
+// data is an array of your projects
+console.log(data);
+```
+
+### Response shape
+
+```json
+[
+  {
+    "_id": "...",
+    "title": "My Awesome App",
+    "description": "A brief description of the project.",
+    "image": "https://image-url.com/thumb.png",
+    "github": "https://github.com/you/repo",
+    "live": "https://yourapp.com",
+    "tech": [
+      { "id": "uuid", "tag": "Next.js" },
+      { "id": "uuid", "tag": "MongoDB" }
+    ]
+  }
+]
+```
+
+---
+
+## 🛠️ Local Setup
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/SyntaxAdil/portfolio-manager.git
+cd portfolio-manager
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Create `.env.local`
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+BETTER_AUTH_SECRET=your_auth_secret
+NEXT_PUBLIC_BASE_URI=http://localhost:3000
+```
+
+### 4. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧰 Tech Stack
 
-## Learn More
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Database | MongoDB + Mongoose |
+| Auth | Better Auth |
+| UI | shadcn/ui + Tailwind CSS |
+| Image Hosting | ImgBB (free) |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+portfolio-manager/
+├── app/
+│   ├── api/
+│   │   └── project/        # POST, PATCH, DELETE, GET handlers
+│   └── (pages)/
+├── components/
+│   ├── model/              # EditPopUp, DltPopUp, AddProject dialogs
+│   └── ui/                 # shadcn components
+├── lib/
+│   ├── db.js               # MongoDB connection
+│   └── auth/               # Better Auth config
+└── model/
+    └── project-model.js    # Mongoose schema
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌐 Deploying to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push to GitHub
+2. Import the repo on [vercel.com](https://vercel.com)
+3. Add your environment variables in the Vercel dashboard
+4. Deploy — your API is live!
+
+---
+
+## 🙋 FAQ
+
+**Do I need to build my own backend?**
+No. Just use the API URL from your dashboard — it's ready to go.
+
+**Is the API public?**
+Yes. Your project data is publicly readable via your API URL. Writes (add/edit/delete) require authentication.
+
+**Where do I host project images?**
+Use [ImgBB](https://imgbb.com) — it's free and gives you a direct image URL.
+
+---
+
+## 📄 License
+
+MIT — free to use and modify.
+
+---
+
+Made with ❤️ by [SyntaxAdil](https://github.com/SyntaxAdil)
