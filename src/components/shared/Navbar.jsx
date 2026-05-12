@@ -11,13 +11,13 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../../@/components/ui/avatar";
+} from "../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../../@/components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
 const Navbar = () => {
   const { data: session, isPending } = authClient.useSession();
@@ -27,9 +27,7 @@ const Navbar = () => {
   const Nav_Links = [
     { id: 1, href: "/", label: "Projects" },
     { id: 2, href: `/add-project`, label: "Add Project" },
-    { id: 3, href: "/edit-project", label: "Edit Project" },
-    { id: 4, href: "/remove-project", label: "Remove Project" },
-  ];
+      ];
 
   const handleLogout = async () => {
     await authClient.signOut();

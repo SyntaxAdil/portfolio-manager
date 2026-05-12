@@ -25,8 +25,6 @@ export const config = {
   matcher: [
     "/",
     "/add-project",
-    "/edit-project/:path*",
-    "/remove-project/:path*",
     "/login",
     "/register"
   ],

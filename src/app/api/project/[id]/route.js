@@ -5,11 +5,6 @@ import { auth } from "../../../../lib/auth/auth";
 import { headers } from "next/headers";
 
 export async function GET(req, { params }) {
-  //   const session = await auth.api.getSession({
-  //     headers: await headers(),
-  //   });
-  //   const user=session?.user;
-
   const { id } = await params;
   console.log(id);
   if (!id)
@@ -26,7 +21,7 @@ export async function GET(req, { params }) {
     await connectDB();
 
     const projects = await Projects.find({ user: id });
-    
+
     return NextResponse.json({
       data: projects,
       success: true,
